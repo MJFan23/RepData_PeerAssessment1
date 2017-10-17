@@ -1,31 +1,45 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
+  title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
-    keep_md: true
+  keep_md: true
 ---
-
-
+  
+  
 ## Loading and preprocessing the data
-data <- read.csv("~/activity.csv", header = TRUE, sep = ",", na.strings = "NA")
+  
+####Set working directory
+  setwd ("/Users/Lauren/Documents/Data Science Coursera")
+
+    library(knitr)
+    library(dplyr)
+    library(ggplot2)
+    library(scales)
+
+####Read Data
+  
+  data <- read.csv("~/activity.csv", header = TRUE, sep = ",", na.strings = "NA")
 data$Date <- as.Date(data$date, "%Y-%m-%d")
 
 
 ## What is mean total number of steps taken per day?
 
 summary(data)
-     steps                date          interval     
- Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
- 1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
- Median :  0.00   2012-10-03:  288   Median :1177.5  
- Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
- 3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
- Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
- NA's   :2304     (Other)   :15840  
+
+steps                date          interval     
+Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
+1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
+Median :  0.00   2012-10-03:  288   Median :1177.5  
+Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
+3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
+Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
+NAs   :2304     (Other)   :15840  
 
 totalSteps <- tapply(data$steps, data$date, sum, na.rm=T)
 avgSteps <- tapply(data$steps, data$date, mean, na.rm=T)
 par(mfrow=c(2,1))
+
+####Make Histogram
 hist(totalSteps, breaks=10, col="red", main="Distribution of the total Number of steps each day", xlab="Average Total Number of Steps")
 hist(as.vector(avgSteps), breaks=10, col="blue", main="Distribution of the Average Number of steps each day", xlab="Average Number of Steps")
 
@@ -33,15 +47,18 @@ hist(as.vector(avgSteps), breaks=10, col="blue", main="Distribution of the Avera
 ## What is the average daily activity pattern?
 data$interval <- as.factor(data$interval)
 l <- levels(data$interval)
+####Calculating the Average
 Steps = tapply(data$steps, data$interval, mean, na.rm=T)
 Interval <- as.numeric(l)
 df <- data.frame(Steps, Interval
+####Creating the Plot with 5min interval                 
 library(ggplot2)
 g <- ggplot(df, aes(Interval, Steps))
 g + geom_line(colour="blue")+ggtitle("Time Series Plot of the 5-minute Interval\n and the Average Number of Steps,\n Taken across all Days") + ylab("Average Number of Steps")
 
 ## Imputing missing values
 
+####Finding the missing values
 NA_index <- is.na(as.character(data$steps))
 data_no_NA <- data[!NA_index,]
 steps_each_day <- aggregate(steps ~ date, data = data_no_NA, sum)
@@ -59,23 +76,26 @@ complete_data <- data
 complete_data[NA_index, ]$steps<-unlist(lapply(NA_index, FUN=function(NA_index){
 steps_per_interval[data[NA_index,]$interval==steps_per_interval$interval,]$average_steps}))
 summary(complete_data)
-     steps                date          interval          Date           
- Min.   :  0.00   2012-10-02:  288   0      :   53   Min.   :2012-10-01  
- 1st Qu.:  0.00   2012-10-03:  288   5      :   53   1st Qu.:2012-10-16  
- Median :  0.00   2012-10-04:  288   10     :   53   Median :2012-10-31  
- Mean   : 36.79   2012-10-05:  288   15     :   53   Mean   :2012-10-31  
- 3rd Qu.: 32.00   2012-10-06:  288   20     :   53   3rd Qu.:2012-11-15  
- Max.   :806.00   (Other)   :13824   (Other):14999   Max.   :2012-11-30  
-                  NA's      : 2304   NA's   : 2304                       
+####Data
+steps                date          interval          Date           
+Min.   :  0.00   2012-10-02:  288   0      :   53   Min.   :2012-10-01  
+1st Qu.:  0.00   2012-10-03:  288   5      :   53   1st Qu.:2012-10-16  
+Median :  0.00   2012-10-04:  288   10     :   53   Median :2012-10-31  
+Mean   : 36.79   2012-10-05:  288   15     :   53   Mean   :2012-10-31  
+3rd Qu.: 32.00   2012-10-06:  288   20     :   53   3rd Qu.:2012-11-15  
+Max.   :806.00   (Other)   :13824   (Other):14999   Max.   :2012-11-30  
+NAs      : 2304   NAs   : 2304                       
 str(complete_data)
 'data.frame':	17568 obs. of  4 variables:
- $ steps   : int  1 1 1 1 1 1 1 1 1 1 ...
- $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: NA NA NA NA NA NA NA NA NA NA ...
- $ interval: Factor w/ 288 levels "0","5","10","15",..: NA NA NA NA NA NA NA NA NA NA ...
- $ Date    : Date, format: "2012-10-01" "2012-10-01" ...
+$ steps   : int  1 1 1 1 1 1 1 1 1 1 ...
+$ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: NA NA NA NA NA NA NA NA NA NA ...
+$ interval: Factor w/ 288 levels "0","5","10","15",..: NA NA NA NA NA NA NA NA NA NA ...
+$ Date    : Date, format: "2012-10-01" "2012-10-01" ...
 
 steps_each_day_complete <- aggregate(steps ~ date, data = complete_data, sum)
 colnames(steps_each_day_complete) <- c("date", "steps")
+
+####Creating Histogram
 hist(as.numeric(steps_each_day_complete$steps), breaks = 20, col = "red", xlab = "Number of Steps", main= "Histogram of the total number of steps taken each day")
 mean(steps_each_day_complete$steps)
 [1] 10766.19
@@ -84,7 +104,7 @@ median(steps_each_day_complete$steps)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-##Creating a factor variable for day of the week:
+####Creating a factor variable for day of the week:
 complete_data$day <- as.factor(weekdays(complete_data$date))
 complete_data$is_weekday <- ifelse(!(complete_data$day %in% c("Saturday","Sunday")), TRUE, FALSE) 
 
@@ -103,6 +123,6 @@ steps_per_interval_weekends$day <- "Weekend"
 
 week_data <- rbind(steps_per_interval_weekends, steps_per_interval_weekdays)
 week_data$day <- as.factor(week_data$day)
-
+ ####Creating the plot
 library(lattice)
 xyplot(average_steps ~  interval | day, data = week_data, layout = c(1,2), type ="l", ylab="Number of Steps")
