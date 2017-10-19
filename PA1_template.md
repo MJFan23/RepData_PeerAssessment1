@@ -52,10 +52,14 @@ NAs   :2304     (Other)   :15840
     Steps = tapply(data$steps, data$interval, mean, na.rm=T)
     Interval <- as.numeric(l)
     df <- data.frame(Steps, Interval
+    
+    
 #### Creating the Plot with 5min interval                 
     library(ggplot2)
     g <- ggplot(df, aes(Interval, Steps))
     g + geom_line(colour="blue")+ggtitle("Time Series Plot of the 5-minute Interval\n and     the Average Number of Steps,\n Taken across all Days") + ylab("Average Number of Steps")
+
+![AvgStepsPerDay](https://github.com/MJFan23/RepData_PeerAssessment1/blob/master/figures/AvgStepsPerDay.png "AvgStepsPerDay")
 
 ## Imputing missing values
 
@@ -104,6 +108,8 @@ $ Date    : Date, format: "2012-10-01" "2012-10-01" ...
     median(steps_each_day_complete$steps)
 [1] 10765
 
+![CompleteDataSet](https://github.com/MJFan23/RepData_PeerAssessment1/blob/master/figures/CompleteDataSet.png "CompleteDataSet")
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 #### Creating a factor variable for day of the week:
@@ -129,3 +135,6 @@ $ Date    : Date, format: "2012-10-01" "2012-10-01" ...
  #### Creating the plot
     library(lattice)
     xyplot(average_steps ~  interval | day, data = week_data, layout = c(1,2), type ="l",      ylab="Number of Steps")
+    
+![Weekend](https://github.com/MJFan23/RepData_PeerAssessment1/blob/master/figures/Weekend.png "Weekend")
+    
