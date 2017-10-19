@@ -71,16 +71,19 @@ NAs   :2304     (Other)   :15840
     max_steps <- max(steps_per_interval$average_steps)
     intervale_max_steps<-steps_per_interval[which.max(steps_per_interval$average_steps),]$interval
     sum(is.na(as.character(data$steps)))
+
 [1] 2304
     sum(is.na(as.character(data$date)))
 [1] 0
     sum(is.na(as.character(data$interval)))
 [1] 0
+    
     NA_index <- which(is.na(as.character(data$steps)))
     complete_data <- data
     complete_data[NA_index,]$steps<-unlist(lapply(NA_index,FUN=function(NA_index){steps_per_interval[data[NA_index,]$interval==steps_per_interval$interval,]$average_step     s}))
     summary(complete_data)
 #### Data
+
 steps                date          interval          Date           
 Min.   :  0.00   2012-10-02:  288   0      :   53   Min.   :2012-10-01  
 1st Qu.:  0.00   2012-10-03:  288   5      :   53   1st Qu.:2012-10-16  
@@ -104,9 +107,10 @@ $ Date    : Date, format: "2012-10-01" "2012-10-01" ...
 #### Creating Histogram
     hist(as.numeric(steps_each_day_complete$steps), breaks = 20, col = "red", xlab =  "Number of Steps", main= "Histogram of the total number of steps taken each day")
     mean(steps_each_day_complete$steps)
-[1] 10766.19
+MEAN: [1] 10766.19
+    
     median(steps_each_day_complete$steps)
-[1] 10765
+MEDIAN: [1] 10765
 
 ![CompleteDataSet](https://github.com/MJFan23/RepData_PeerAssessment1/blob/master/figures/CompleteDataSet.png "CompleteDataSet")
 
