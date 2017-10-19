@@ -42,6 +42,7 @@ NAs   :2304     (Other)   :15840
     hist(totalSteps, breaks=10, col="red", main="Distribution of the total Number of steps each day", xlab="Average Total Number of Steps")
     hist(as.vector(avgSteps), breaks=10, col="blue", main="Distribution of the Average Number of steps each day", xlab="Average Number of Steps")
 
+![AvgSteps](https://github.com/MJFan23/RepData_PeerAssessment1/blob/master/figures/AvgSteps.png "AvgSteps")
 
 
 ## What is the average daily activity pattern?
